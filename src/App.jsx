@@ -24,6 +24,7 @@ import signature from "./images/signature/signature.png";
 //* Music
 import backgroundMusic from "./music/song.mp3";
 import letterMusic from "./music/song2.mp3";
+import revealMusic from "./music/song3.mp3";
 
 function App() {
   const [stage, setStage] = useState("game"); // 'game', 'question', 'loading', 'restaurant', 'outfit', 'letter', 'reveal'
@@ -72,6 +73,13 @@ function App() {
     return audio;
   })[0];
 
+  const revealAudioRef = useState(() => {
+    const audio = new Audio(revealMusic);
+    audio.loop = true;
+    audio.volume = 0.15;
+    return audio;
+  })[0];
+
   // Initialize available letters (scrambled)
   useEffect(() => {
     const allLetters = "CANIBEYOURVALENTINE".split("");
@@ -104,21 +112,23 @@ function App() {
     if (stage === "letter") {
       // Fade out background music and play letter music
       audioRef.pause();
+      revealAudioRef.pause();
       letterAudioRef.currentTime = 0;
       letterAudioRef.muted = isMuted;
       letterAudioRef
         .play()
         .catch((err) => console.log("Letter music play failed:", err));
     } else if (stage === "reveal") {
-      // Stop letter music and resume background music
+      // Stop letter music and play reveal music
       letterAudioRef.pause();
-      audioRef.currentTime = 0;
-      audioRef.muted = isMuted;
-      audioRef
+      audioRef.pause();
+      revealAudioRef.currentTime = 0;
+      revealAudioRef.muted = isMuted;
+      revealAudioRef
         .play()
-        .catch((err) => console.log("Background music play failed:", err));
+        .catch((err) => console.log("Reveal music play failed:", err));
     }
-  }, [stage, audioRef, letterAudioRef, isMuted]);
+  }, [stage, audioRef, letterAudioRef, revealAudioRef, isMuted]);
 
   // Background music control
   const startAudio = async () => {
@@ -153,7 +163,8 @@ function App() {
   useEffect(() => {
     audioRef.muted = isMuted;
     letterAudioRef.muted = isMuted;
-  }, [isMuted, audioRef, letterAudioRef]);
+    revealAudioRef.muted = isMuted;
+  }, [isMuted, audioRef, letterAudioRef, revealAudioRef]);
 
   const toggleMute = () => {
     setIsMuted(!isMuted);
