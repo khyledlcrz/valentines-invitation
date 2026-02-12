@@ -106,13 +106,17 @@ function App() {
       audioRef.pause();
       letterAudioRef.currentTime = 0;
       letterAudioRef.muted = isMuted;
-      letterAudioRef.play().catch(err => console.log("Letter music play failed:", err));
+      letterAudioRef
+        .play()
+        .catch((err) => console.log("Letter music play failed:", err));
     } else if (stage === "reveal") {
       // Stop letter music and resume background music
       letterAudioRef.pause();
       audioRef.currentTime = 0;
       audioRef.muted = isMuted;
-      audioRef.play().catch(err => console.log("Background music play failed:", err));
+      audioRef
+        .play()
+        .catch((err) => console.log("Background music play failed:", err));
     }
   }, [stage, audioRef, letterAudioRef, isMuted]);
 
@@ -757,7 +761,7 @@ function App() {
       },
       {
         id: 2,
-        name: "Start Boy / Girl",
+        name: "Semi-Formal",
         style: "Black and White",
 
         image: outfit2,
